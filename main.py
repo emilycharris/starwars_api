@@ -1,8 +1,28 @@
 import requests
+from urllib.parse import urlparse
 
-url = "http://swapi.co/api/"
+def display_name(response, lookup_name):
+    for item in response['results']:
+        item_url=item['url']
+        item_index = (item_url.split('/'))
+        index = item_index[5]
+        print(index, item[lookup_name])
 
-response = requests.get(url).json()
+def get_results(response, lookup_name):
+    if response['next']:
+        while response['next']:
+            display_name(response, lookup_name)
+            url = response['next']
+            response = requests.get(url).json()
+        else:
+            display_name(response, lookup_name)
+    else:
+        display_name(response, lookup_name)
+    
+def make_api_call(data):
+    url, lookup_name = data
+    response = requests.get(url).json()
+    get_results(response, lookup_name)
 
 choice = int(input("""
     Choose which to lookup:
@@ -12,45 +32,9 @@ choice = int(input("""
     """))
 
 choice_dict = {
-1: "http://swapi.co/api/people",
-2: "http://swapi.co/api/films",
-3: "http://swapi.co/api/vehicles",
+1: ["http://swapi.co/api/people", 'name'],
+2: ["http://swapi.co/api/films", 'title'],
+3: ["http://swapi.co/api/vehicles", 'name']
 }
-if choice == 1: #87 results
-    url = choice_dict[choice]
-    response = requests.get(url).json()
-    if response['next']:
-        while response['next']:
-            for item in response['results']:
-                print(item['name'])
-            url = response['next']
-            response = requests.get(url).json()
-        else:
-            for item in response['results']:
-                print(item['name'])
 
-if choice == 2: #7 results
-    url = choice_dict[choice]
-    response = requests.get(url).json()
-    if response['next']:
-        while response['next']:
-            for item in response['results']:
-                print(item['title'])
-            url = response['next']
-            response = requests.get(url).json()
-        else:
-            for item in response['results']:
-                print(item['title'])
-                
-if choice == 3: #39 results
-    url = choice_dict[choice]
-    response = requests.get(url).json()
-    if response['next']:
-        while response['next']:
-            for item in response['results']:
-                print(item['name'])
-            url = response['next']
-            response = requests.get(url).json()
-        else:
-            for item in response['results']:
-                print(item['name'])
+make_api_call(choice_dict[choice])
