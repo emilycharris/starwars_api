@@ -19,15 +19,38 @@ choice_dict = {
 if choice == 1: #87 results
     url = choice_dict[choice]
     response = requests.get(url).json()
-    for person in response['results']:
-        print(person['name'])
+    if response['next']:
+        while response['next']:
+            for item in response['results']:
+                print(item['name'])
+            url = response['next']
+            response = requests.get(url).json()
+        else:
+            for item in response['results']:
+                print(item['name'])
+
 if choice == 2: #7 results
     url = choice_dict[choice]
     response = requests.get(url).json()
-    for film in response['results']:
-        print(film['title'])
+    if response['next']:
+        while response['next']:
+            for item in response['results']:
+                print(item['title'])
+            url = response['next']
+            response = requests.get(url).json()
+        else:
+            for item in response['results']:
+                print(item['title'])
+                
 if choice == 3: #39 results
     url = choice_dict[choice]
     response = requests.get(url).json()
-    for film in response['results']:
-        print(film['name'])
+    if response['next']:
+        while response['next']:
+            for item in response['results']:
+                print(item['name'])
+            url = response['next']
+            response = requests.get(url).json()
+        else:
+            for item in response['results']:
+                print(item['name'])
