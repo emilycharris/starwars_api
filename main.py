@@ -29,7 +29,7 @@ def make_api_call(data):
         detail_url = url + "/" + detail
         response = requests.get(detail_url).json()
         for key, value in response.items():
-            print(key, value)
+            print(key, ":", value, "\n")
 
 
 choice = int(input("""
